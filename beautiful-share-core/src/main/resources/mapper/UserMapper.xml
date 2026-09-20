@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pacal.share.dao.UserDao">
+
+    <resultMap id="BaseUserMap" type="com.pacal.share.entity.po.UserPO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="avatar" property="avatar"/>
+        <result column="wx_union_id" property="wxUnionId"/>
+        <result column="wx_open_id" property="wxOpenId"/>
+        <result column="role_id" property="roleId"/>
+        <result column="gender" property="gender"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="userColumns">
+        id, username, avatar, wx_union_id, wx_open_id, role_id, gender, status,
+        last_login_time, create_time
+    </sql>
+
+    <insert id="insert" parameterType="com.pacal.share.entity.po.UserPO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (username, avatar, wx_union_id, wx_open_id,
+            role_id, gender, status, last_login_time)
+        VALUES (#{username}, #{avatar}, #{wxUnionId}, #{wxOpenId},
+            #{roleId}, #{gender}, #{status}, #{lastLoginTime})
+    </insert>
+
+    <update id="update" parameterType="com.pacal.share.entity.po.UserPO">
+        UPDATE `user`
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="wxUnionId != null">wx_union_id = #{wxUnionId},</if>
+            <if test="roleId != null">role_id = #{roleId},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="lastLoginTime != null">last_login_time = #{lastLoginTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" resultMap="BaseUserMap">
+        SELECT <include refid="userColumns"/>
+        FROM `user`
+        WHERE id = #{id}
+    </select>
+
+    <select id="getUser" resultMap="BaseUserMap">
+        SELECT <include refid="userColumns"/>
+        FROM `user`
+        WHERE id = #{id}
+    </select>
+
+    <select id="getByWxOpenId" resultMap="BaseUserMap">
+        SELECT <include refid="userColumns"/>
+        FROM `user`
+        WHERE wx_open_id = #{wxOpenId}
+        LIMIT 1
+    </select>
+
+    <select id="queryByIds" resultMap="BaseUserMap">
+        SELECT <include refid="userColumns"/>
+        FROM `user`
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="queryList" resultMap="BaseUserMap">
+        SELECT <include refid="userColumns"/>
+        FROM `user`
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND ( username LIKE CONCAT('%', #{keyword}, '%')
+                    OR wx_open_id LIKE CONCAT('%', #{keyword}, '%') )
+            </if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="roleId != null">AND role_id = #{roleId}</if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(1)
+        FROM `user`
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND ( username LIKE CONCAT('%', #{keyword}, '%')
+                    OR wx_open_id LIKE CONCAT('%', #{keyword}, '%') )
+            </if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="roleId != null">AND role_id = #{roleId}</if>
+        </where>
+    </select>
+</mapper>
