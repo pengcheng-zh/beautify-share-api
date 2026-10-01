@@ -20,7 +20,7 @@
     </resultMap>
 
     <sql id="postColumns">
-        id, user_id, content, pictures, location, latitude, longitude, voice, duration,
+        id, user_id, content, pictures, location, latitude, longitude, voice, duration, like_count, comment_count,
         status, audit_user_id, audit_reason, audit_time, create_time
     </sql>
 
@@ -43,6 +43,11 @@
             <if test="voice != null">voice = #{voice},</if>
             <if test="duration != null">duration = #{duration},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="auditUserId != null">audit_user_id = #{auditUserId},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="likeCount != null">like_count = #{likeCount},</if>
+            <if test="commentCount != null">comment_count = #{commentCount},</if>
         </set>
         WHERE id = #{id}
     </update>
@@ -138,4 +143,8 @@
             </if>
         </where>
     </select>
+
+    <update id="increaseCommentCount">
+        update user_post set comment_count = comment_count + 1 where id = #{postId}
+    </update>
 </mapper>

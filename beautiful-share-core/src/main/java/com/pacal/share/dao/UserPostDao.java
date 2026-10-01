@@ -58,4 +58,6 @@ public interface UserPostDao {
 
     int countForAudit(@Param("status") String status,
                       @Param("keyword") String keyword);
+
+    void increaseCommentCount(@Param("postId") Integer postId);
 }

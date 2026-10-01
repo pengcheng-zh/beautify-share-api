@@ -33,17 +33,17 @@
 
     <select id="countByUserAndPost" resultType="int">
         SELECT COUNT(1) FROM user_post_favorite
-        WHERE user_id = #{userId} AND post_id = #{postId}
+        WHERE user_id = #{userId} AND post_id = #{postId} AND status = 'A'
     </select>
 
     <select id="countByPostId" resultType="int">
-        SELECT COUNT(1) FROM user_post_favorite WHERE post_id = #{postId}
+        SELECT COUNT(1) FROM user_post_favorite WHERE post_id = #{postId} AND status = 'A'
     </select>
 
     <select id="countByPostIds" resultType="com.pacal.share.entity.dto.IdCountDTO">
         SELECT post_id AS id, COUNT(1) AS `count`
         FROM user_post_favorite
-        WHERE post_id IN
+        WHERE status = 'A' and post_id IN
         <foreach collection="postIds" item="pid" open="(" separator="," close=")">
             #{pid}
         </foreach>
@@ -52,7 +52,7 @@
 
     <select id="queryFavoritedPostIds" resultType="int">
         SELECT post_id FROM user_post_favorite
-        WHERE user_id = #{userId}
+        WHERE user_id = #{userId} and status = 'A'
         AND post_id IN
         <foreach collection="postIds" item="pid" open="(" separator="," close=")">
             #{pid}

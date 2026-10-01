@@ -1,8 +1,10 @@
 package com.pacal.share.service;
 
 import com.pacal.share.common.Constants;
+import com.pacal.share.dao.UserPostDao;
 import com.pacal.share.dao.UserPostFavoriteDao;
 import com.pacal.share.entity.po.UserPostFavoritePO;
+import com.pacal.share.entity.po.UserPostPO;
 import com.pacal.share.entity.vo.PostInteractionVO;
 import com.pacal.share.utils.RequestUtil;
 import jakarta.annotation.Resource;
@@ -14,8 +16,12 @@ import java.util.Objects;
 public class PostFavoriteService {
     @Resource
     UserPostFavoriteDao favoriteDao;
+
+    @Resource
+    UserPostDao userPostDao;
     public void toggleFavorite(Integer postId) {
         Integer userId = RequestUtil.getUserIdInt();
+
         UserPostFavoritePO favoritePO = favoriteDao.getByUserIdAndPostId( userId, postId );
         if (Objects.isNull(favoritePO)) {
             favoritePO = new UserPostFavoritePO();

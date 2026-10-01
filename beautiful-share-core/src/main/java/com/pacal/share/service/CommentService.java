@@ -136,6 +136,11 @@ public class CommentService {
         updatePO.setAuditReason( reason );
         updatePO.setAuditTime( DateUtil.getCurrentDate() );
         commentDao.update( updatePO );
+
+        if ( ApproveStatusEnum.APPROVED.status.equals( status ) ) {
+            // 增加文章评论数
+            userPostDao.increaseCommentCount( commentPO.getPostId() );
+        }
     }
 
     /* ---------- helpers ---------- */

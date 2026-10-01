@@ -32,7 +32,7 @@
 
     <select id="queryLikedPostIds" resultType="int">
         SELECT post_id FROM user_post_like
-        WHERE user_id = #{userId}
+        WHERE user_id = #{userId} AND status = 'A'
         AND post_id IN
         <foreach collection="postIds" item="pid" open="(" separator="," close=")">
             #{pid}
@@ -41,7 +41,7 @@
 
     <select id="queryPostIdsByUserId" resultType="int">
         SELECT post_id FROM user_post_like
-        WHERE user_id = #{userId}
+        WHERE user_id = #{userId} AND status = 'A'
         ORDER BY id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
@@ -59,10 +59,10 @@
             -- 按帖子分组，点赞时间倒序，给序号；同post内新点赞排前面
             ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY create_time DESC) AS rn
             FROM user_post_like
-            where post_id in <foreach collection="postIds" item="postId" open="(" separator="," close=")">
+            where status = 'A' and post_id in <foreach collection="postIds" item="postId" open="(" separator="," close=")">
                 #{postId}
             </foreach>
         ) t
-        WHERE rn &lt; 3;
+        WHERE rn &lt; 10;
     </select>
 </mapper>

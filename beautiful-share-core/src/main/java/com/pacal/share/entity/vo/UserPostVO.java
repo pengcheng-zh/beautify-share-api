@@ -21,6 +21,7 @@ public class UserPostVO {
     private String latitude;
     private String longitude;
     private String voice;
+    private Integer duration;
     private String status;
     private String statusLabel;
     private String auditReason;
@@ -51,6 +52,7 @@ public class UserPostVO {
         vo.setLatitude( po.getLatitude() );
         vo.setLongitude( po.getLongitude() );
         vo.setVoice( po.getVoice() );
+        vo.setDuration( po.getDuration() );
         vo.setStatus( po.getStatus() );
         vo.setStatusLabel(ApproveStatusEnum.getLabelByStatus( po.getStatus() ));
         vo.setAuditReason( po.getAuditReason() );

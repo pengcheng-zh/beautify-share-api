@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class LoginService {
@@ -90,10 +92,12 @@ public class LoginService {
     }
 
     public void updateUserGender(int sex) {
+        List<String> avatar = List.of("https://image.xianshu.site/2026-10-01/de58b40f-d7db-4af3-884d-ff0fa99ed5a2.png", "https://image.xianshu.site/2026-10-01/0d840e18-5ede-4076-b4e8-31aeef06f323.png");
         int userId = RequestUtil.getUserIdInt();
         UserPO userPO = new UserPO();
         userPO.setId(userId);
         userPO.setGender(sex);
+        userPO.setAvatar(avatar.get(sex));
         userDao.update( userPO );
     }
 
